@@ -155,7 +155,7 @@ public class MySQLBinlogEventBuffer {
     }
 
     public boolean empty() {
-        return queue.isEmpty();
+        return queue.isEmpty() && inFileSize == 0;
     }
 
     public void setShouldEvict(boolean shouldEvict) {
