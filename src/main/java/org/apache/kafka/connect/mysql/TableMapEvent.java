@@ -19,8 +19,6 @@ package org.apache.kafka.connect.mysql;
 
 
 import com.github.shyiko.mysql.binlog.event.TableMapEventData;
-import org.apache.kafka.connect.mysql.AbstractEvent;
-import org.apache.kafka.connect.mysql.MySQLBinlogEvent;
 
 public class TableMapEvent extends AbstractEvent {
     private final long tableId;

@@ -20,7 +20,6 @@ package org.apache.kafka.connect.mysql;
 
 import com.github.shyiko.mysql.binlog.BinaryLogClient;
 import com.github.shyiko.mysql.binlog.event.EventType;
-import org.apache.kafka.connect.mysql.MySQLBinlogEventBuffer;
 import org.apache.kafka.connect.mysql.MySQLBinlogEventListener;
 import org.apache.kafka.connect.mysql.MySQLIsolatedServer;
 import org.apache.kafka.connect.source.SourceRecord;
@@ -30,7 +29,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -55,7 +53,7 @@ public class MySQLReplicatorTest {
         Integer port = server.getPort();
         client = new BinaryLogClient("localhost", port, "replicator", "replicator");
         eventBuffer = new MySQLBinlogEventBuffer(1024L, 0.5, "events");
-        eventListener = new MySQLBinlogEventListener(client, eventBuffer, null, eventRecordFactory);
+        eventListener = new MySQLBinlogEventListener(client, "loalhost", eventBuffer, null, eventRecordFactory);
         client.registerEventListener(eventListener);
         client.connect(REPLICATOR_TIMEOUT);
         ArrayList<String> empty = new ArrayList<>();

@@ -19,22 +19,27 @@ package org.apache.kafka.connect.mysql;
 
 
 import com.github.shyiko.mysql.binlog.event.EventType;
+import org.apache.kafka.connect.mysql.MySQLBinlogEvent;
 
 public class AbstractEvent {
     protected final EventType type;
     protected final long timestamp;
-    protected final long offset;
+    protected final long binlog_position;
+    protected final String db_hostname;
+    protected final String binlog_filename;
     protected String database;
 
-    public AbstractEvent(org.apache.kafka.connect.mysql.MySQLBinlogEvent event) {
+    public AbstractEvent(MySQLBinlogEvent event) {
         this.timestamp = event.getTimestamp();
         this.type = event.getEventType();
-        this.offset = event.getOffset();
+        this.db_hostname = event.getHostname();
+        this.binlog_filename = event.getBinlogFilename();
+        this.binlog_position = event.getBinlogPosition();
         this.database = null;
     }
 
-    public long getOffset() {
-        return offset;
+    public long getBinlogPosition() {
+        return binlog_position;
     }
 
     public long getTimestamp() {

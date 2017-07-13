@@ -42,16 +42,16 @@ public class MySQLSourceTaskTest {
     private static final long REPLICATOR_TIMEOUT = 5000;
     private static final long EVENT_BUFFER_POLL_TIMEOUT = 1;
 
-    private static MySQLIsolatedServer server;
+    private static org.apache.kafka.connect.mysql.MySQLIsolatedServer server;
     private BinaryLogClient client;
-    private MySQLBinlogEventListener eventListener;
-    private MySQLBinlogEventBuffer eventBuffer;
+    private org.apache.kafka.connect.mysql.MySQLBinlogEventListener eventListener;
+    private org.apache.kafka.connect.mysql.MySQLBinlogEventBuffer eventBuffer;
     private HashMap<String, String> config;
-    private MySQLSourceTask task;
+    private org.apache.kafka.connect.mysql.MySQLSourceTask task;
     private OffsetStorageReader offsetStorageReader;
     private SourceTaskContext context;
     private boolean verifyMocks = false;
-    private EventRecordFactory eventRecordFactory;
+    private org.apache.kafka.connect.mysql.EventRecordFactory eventRecordFactory;
 
     @BeforeClass
     public static void setUpDB() throws Exception {
@@ -68,7 +68,7 @@ public class MySQLSourceTaskTest {
         TopicConfig defaultTopicConf = new TopicConfig(empty, empty, empty, empty, "");
         RemoteConfig defaultRemoteConf = new RemoteConfig("localhost", String.valueOf(port), "replicator", "replicator");
         eventRecordFactory = new EventRecordFactory(defaultTopicConf, defaultRemoteConf);
-        eventListener = new MySQLBinlogEventListener(client, eventBuffer, null, eventRecordFactory);
+        eventListener = new MySQLBinlogEventListener(client, "localhost", eventBuffer, null, eventRecordFactory);
         client.registerEventListener(eventListener);
 
         config = new HashMap<>();

@@ -180,7 +180,7 @@ public class EventRecordFactory {
                 break;
             case ROTATE:
             case FORMAT_DESCRIPTION:
-                return recordList;                             // skip ROTATE and FORMAT_DESCRIPTION event to avoid negative binlog position
+                return recordList;                             // skip ROTATE and FORMAT_DESCRIPTION event to avoid negative binlog binlog_position
             default:
                 if (type == EventType.ROTATE) {
                     tableMetaCache.clear();
@@ -285,7 +285,7 @@ public class EventRecordFactory {
 
     private SourceRecord buildSourceRecord(EventType type, AbstractEvent event, String binlogFileName) throws Exception {
         Map<String, String> partition = Collections.singletonMap(MySQLSourceConfig.SOURCE_PARTITION_KEY, MySQLSourceConfig.SOURCE_PARTITION_VALUE);
-        String binlogOffset = binlogFileName + ':' + event.getOffset();
+        String binlogOffset = binlogFileName + ':' + event.getBinlogPosition();
 
         Map<String, ?> offset = Collections.singletonMap(MySQLSourceConfig.OFFSET_KEY, binlogOffset);
 

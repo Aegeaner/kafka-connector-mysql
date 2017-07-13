@@ -19,6 +19,7 @@ package org.apache.kafka.connect.mysql;
 
 
 import org.apache.kafka.connect.connector.ConnectorContext;
+import org.apache.kafka.connect.mysql.MySQLSourceConnector;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;

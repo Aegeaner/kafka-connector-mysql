@@ -46,7 +46,7 @@ public class MySQLSourceTask extends SourceTask {
     private double memory_ratio;
     private String username;
     private String password;
-    private String host;
+    private String hostname;
     private int port;
     private List<String> event_type_blacklist;
     private List<String> table_blacklist;
@@ -62,7 +62,7 @@ public class MySQLSourceTask extends SourceTask {
     public void start(Map<String, String> props) {
         Map<String, Object> configuration = MySQLSourceConfig.CONFIG_DEF.parse(props);
 
-        host = (String) configuration.get(MySQLSourceConfig.HOST_CONFIG);
+        hostname = (String) configuration.get(MySQLSourceConfig.HOST_CONFIG);
         port = (int) configuration.get(MySQLSourceConfig.PORT_CONFIG);
         batch_size = (int)configuration.get(MySQLSourceConfig.POLL_BATCH_SIZE);
         in_memory_event_size = (long) configuration.get(MySQLSourceConfig.IN_MEMORY_EVENT_SIZE);
@@ -79,7 +79,7 @@ public class MySQLSourceTask extends SourceTask {
         List<String> table_name = (List<String>) configuration.get(MySQLSourceConfig.TABLE_NAME);
         String topic_prefix = (String) configuration.get(MySQLSourceConfig.TOPIC_PREFIX);
         TopicConfig topicConfig = new TopicConfig(database_pattern, database_name, table_pattern, table_name, topic_prefix);
-        RemoteConfig remoteConfig = new RemoteConfig(host, String.valueOf(port), username, password);
+        RemoteConfig remoteConfig = new RemoteConfig(hostname, String.valueOf(port), username, password);
 
         this.eventRecordFactory = new EventRecordFactory(topicConfig, remoteConfig);
 
@@ -87,9 +87,9 @@ public class MySQLSourceTask extends SourceTask {
     }
 
     private void setupBinlogClient() {
-        client = new BinaryLogClient(host, port, username, password);
+        client = new BinaryLogClient(hostname, port, username, password);
         eventBuffer = new MySQLBinlogEventBuffer(in_memory_event_size, memory_ratio, event_cache_file_name);
-        eventListener = new MySQLBinlogEventListener(client, eventBuffer, table_blacklist, eventRecordFactory);
+        eventListener = new MySQLBinlogEventListener(client, hostname, eventBuffer, table_blacklist, eventRecordFactory);
         client.registerEventListener(eventListener);
     }
 

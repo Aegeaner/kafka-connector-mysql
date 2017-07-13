@@ -27,7 +27,6 @@ import com.github.shyiko.mysql.binlog.event.TableMapEventData;
 import com.github.shyiko.mysql.binlog.event.UpdateRowsEventData;
 import com.github.shyiko.mysql.binlog.event.WriteRowsEventData;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 public class MySQLBinlogEvent implements Serializable {
@@ -35,13 +34,18 @@ public class MySQLBinlogEvent implements Serializable {
     private final EventHeaderV4 header;
     private final long timestamp;
     private final EventType type;
-    private final long offset;
+    private final String binlogFilename;
+    private final long binlogPosition;
+    private final String hostname;
     protected EventData eventdata;
 
-    public MySQLBinlogEvent(Event event) {
+
+    public MySQLBinlogEvent(Event event, String hostname, String binlogFilename) {
         this.header = event.getHeader();
         this.type = header.getEventType();
-        this.offset = header.getNextPosition(); // read from next position to avoid repeatly sending last event
+        this.hostname = hostname;
+        this.binlogFilename = binlogFilename;
+        this.binlogPosition = header.getPosition();
         this.timestamp = this.header.getTimestamp();
         this.eventdata = event.getData();
     }
@@ -68,8 +72,8 @@ public class MySQLBinlogEvent implements Serializable {
         return this.timestamp;
     }
 
-    public long getOffset() {
-        return offset;
+    public long getBinlogPosition() {
+        return this.binlogPosition;
     }
 
     public Long getTableId() {
@@ -87,5 +91,13 @@ public class MySQLBinlogEvent implements Serializable {
                 return ((TableMapEventData) eventdata).getTableId();
         }
         return null;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public String getBinlogFilename() {
+        return binlogFilename;
     }
 }

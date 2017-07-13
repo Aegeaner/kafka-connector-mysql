@@ -19,13 +19,9 @@ package org.apache.kafka.connect.mysql;
 
 
 import com.github.shyiko.mysql.binlog.event.TableMapEventData;
-import org.apache.kafka.connect.mysql.AbstractEvent;
-import org.apache.kafka.connect.mysql.MySQLBinlogEvent;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RowEvent extends AbstractEvent {
 

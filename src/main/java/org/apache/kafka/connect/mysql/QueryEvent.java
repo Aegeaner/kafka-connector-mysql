@@ -19,8 +19,6 @@ package org.apache.kafka.connect.mysql;
 
 
 import com.github.shyiko.mysql.binlog.event.QueryEventData;
-import org.apache.kafka.connect.mysql.AbstractEvent;
-import org.apache.kafka.connect.mysql.MySQLBinlogEvent;
 
 public class QueryEvent extends AbstractEvent {
 

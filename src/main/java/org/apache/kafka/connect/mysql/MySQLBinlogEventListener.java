@@ -33,10 +33,12 @@ public class MySQLBinlogEventListener implements BinaryLogClient.EventListener {
     private final MySQLBinlogEventBuffer eventBuffer;
     private final BinaryLogClient client;
     private final List<String> tableBlacklist;
+    private final String hostname;
     private EventRecordFactory eventRecordFactory;
 
-    public MySQLBinlogEventListener(BinaryLogClient client, MySQLBinlogEventBuffer eventBuffer, List<String> table_blacklist, EventRecordFactory eventRecordFactory) {
+    public MySQLBinlogEventListener(BinaryLogClient client, String hostname, MySQLBinlogEventBuffer eventBuffer, List<String> table_blacklist, EventRecordFactory eventRecordFactory) {
         this.client = client;
+        this.hostname = hostname;
         this.eventBuffer = eventBuffer;
         this.tableBlacklist = table_blacklist;
         this.eventRecordFactory = eventRecordFactory;
@@ -44,7 +46,7 @@ public class MySQLBinlogEventListener implements BinaryLogClient.EventListener {
 
     @Override
     public void onEvent(Event event) {
-        MySQLBinlogEvent ev = new MySQLBinlogEvent(event);
+        MySQLBinlogEvent ev = new MySQLBinlogEvent(event, hostname, client.getBinlogFilename());
         try {
             if (tableBlacklist == null || !eventRecordFactory.checkTableBlacklist(ev, tableBlacklist)) {
                 eventBuffer.put(ev);
